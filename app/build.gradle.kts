@@ -17,7 +17,7 @@ android {
         versionName = "2.0.0"
 
         // API URL — cambiar en producción
-        buildConfigField("String", "API_BASE_URL", "\"https://overhaul-result-grout.ngrok-free.dev/api/\"")
+        buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.35:8000/api/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

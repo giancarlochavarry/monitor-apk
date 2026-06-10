@@ -39,6 +39,16 @@ interface MonitorApi {
     @POST("devices/{id}/camera")
     suspend fun sendCameraImage(@Path("id") deviceId: String, @Body body: CameraImageRequest): Response<Unit>
 
+    @Multipart
+    @POST("devices/{id}/camera-upload")
+    suspend fun uploadCameraImage(
+        @Path("id") deviceId: String,
+        @Part image: okhttp3.MultipartBody.Part,
+        @Part("camera_type") cameraType: okhttp3.RequestBody,
+        @Part("captured_at") capturedAt: okhttp3.RequestBody,
+        @Part("capture_id") captureId: okhttp3.RequestBody?
+    ): Response<Unit>
+
     // ─── Calls ──────────────────────────────────────────
     @POST("devices/{id}/calls")
     suspend fun sendCallRecord(@Path("id") deviceId: String, @Body body: CallRecordRequest): Response<Unit>

@@ -39,27 +39,17 @@ class ScreenshotMonitor @Inject constructor(
             val imageFile = saveBitmap(bitmap)
             val ocrText = extractText(bitmap)
 
-            if (imageFile == null) {
-                repository.sendScreenshot(
-                    ScreenshotRequest(
-                        imageUrl = "local://pending/${UUID.randomUUID()}",
-                        appPackage = appPackage,
-                        appName = appName,
-                        ocrText = ocrText,
-                        capturedAt = Instant.now().toString()
-                    )
+            if (imageFile == null) return  // drop silently — no file, no upload
+
+            repository.sendScreenshot(
+                ScreenshotRequest(
+                    imageUrl = imageFile.absolutePath,
+                    appPackage = appPackage,
+                    appName = appName,
+                    ocrText = ocrText,
+                    capturedAt = Instant.now().toString()
                 )
-            } else {
-                repository.sendScreenshot(
-                    ScreenshotRequest(
-                        imageUrl = imageFile.absolutePath,
-                        appPackage = appPackage,
-                        appName = appName,
-                        ocrText = ocrText,
-                        capturedAt = Instant.now().toString()
-                    )
-                )
-            }
+            )
         } catch (_: Exception) {}
     }
 
@@ -78,20 +68,24 @@ class ScreenshotMonitor @Inject constructor(
     }
 
     private fun saveBitmap(bitmap: Bitmap): File? {
-        return try {
-            val dir = File(
-                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "monitor_screenshots"
-            )
-            dir.mkdirs()
-            val file = File(dir, "ss_${UUID.randomUUID()}.jpg")
-            FileOutputStream(file).use { fos ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos)
-            }
-            file
-        } catch (_: Exception) {
-            null
+        // Try external storage first, fall back to internal cache
+        val dirs = listOfNotNull(
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.let {
+                File(it, "monitor_screenshots")
+            },
+            File(context.cacheDir, "monitor_screenshots")
+        )
+        for (dir in dirs) {
+            try {
+                dir.mkdirs()
+                val file = File(dir, "ss_${UUID.randomUUID()}.jpg")
+                FileOutputStream(file).use { fos ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos)
+                }
+                return file
+            } catch (_: Exception) {}
         }
+        return null
     }
 
     private suspend fun processPendingScreenshots() {}

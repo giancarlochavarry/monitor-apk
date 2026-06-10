@@ -105,6 +105,21 @@ class MonitorRepository @Inject constructor(
         }
     }
 
+    suspend fun uploadCameraImageFile(file: File, cameraType: String, captureId: String? = null): Result<Unit> {
+        val deviceId = prefs.deviceId ?: return Result.failure(Exception("No device"))
+        return try {
+            val requestBody = file.readBytes().toRequestBody("image/jpeg".toMediaTypeOrNull())
+            val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
+            val typeBody = cameraType.toRequestBody("text/plain".toMediaTypeOrNull())
+            val timeBody = java.time.Instant.now().toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            val captureIdBody = captureId?.toRequestBody("text/plain".toMediaTypeOrNull())
+            api.uploadCameraImage(deviceId, part, typeBody, timeBody, captureIdBody)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun sendCallRecord(req: CallRecordRequest): Result<Unit> {
         val deviceId = prefs.deviceId ?: return Result.failure(Exception("No device"))
         return try {
