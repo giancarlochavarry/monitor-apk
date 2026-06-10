@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Monitor Empresarial</string>
+    <string name="accessibility_desc">Servicio de accesibilidad para monitoreo corporativo</string>
+    <string name="channel_monitor">Monitoreo</string>
+    <string name="channel_monitor_desc">Servicio de monitoreo de dispositivos corporativos</string>
+    <string name="channel_alerts">Alertas</string>
+    <string name="channel_alerts_desc">Alertas del sistema de monitoreo</string>
+    <string name="monitor_running">Monitoreo activo</string>
+    <string name="btn_start">Iniciar monitoreo</string>
+    <string name="btn_stop">Detener monitoreo</string>
+</resources>
