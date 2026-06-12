@@ -18,9 +18,11 @@ import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 
 /**
- * Simplified WebRTC-style streaming — captures camera + mic as H264/AAC
+ * Simplified WebRTC-style streaming -- captures camera + mic as H264/AAC
  * and streams segments to server via HTTP multipart upload.
  * Replaces the need for full WebRTC when live streaming is desired.
  */
@@ -114,9 +116,9 @@ class LiveStreamer(private val context: Context) {
         camera?.apply {
             val params = parameters ?: return@apply
             val supportedSizes = params.supportedPreviewSizes
-            val size = supportedSizes?.getOrElse(0) { Camera.Size(640, 480) }
-            if (size != null) {
-                params.setPreviewSize(size.width, size.height)
+            val sz = supportedSizes?.firstOrNull()
+            if (sz != null) {
+                params.setPreviewSize(sz.width, sz.height)
                 parameters = params
             }
             setDisplayOrientation(90)
@@ -146,7 +148,7 @@ class LiveStreamer(private val context: Context) {
                 setMaxDuration(segmentDurationMs.toInt())
                 setOnInfoListener { _, what, _ ->
                     if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                        // Segment complete — upload and start next
+                        // Segment complete -- upload and start next
                         recorderRunning = false
                         stop()
                         release()
@@ -272,13 +274,11 @@ class LiveStreamer(private val context: Context) {
     }
 
     private fun hasCameraPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun hasAudioPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getBaseUrl(): String {

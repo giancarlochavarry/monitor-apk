@@ -118,17 +118,17 @@ class BrowserMonitor(private val context: Context) {
             // Fallback: use android.provider.Browser
             try {
                 val cursor = context.contentResolver.query(
-                    Browser.BOOKMARKS_URI,
+                    Uri.parse("content://browser/bookmarks"),
                     arrayOf(
-                        Browser.BookmarkColumns.URL,
-                        Browser.BookmarkColumns.TITLE,
-                        Browser.BookmarkColumns.DATE,
-                        Browser.BookmarkColumns.VISITS,
-                        Browser.BookmarkColumns.BOOKMARK
+                        "url",
+                        "title",
+                        "date",
+                        "visits",
+                        "bookmark"
                     ),
-                    "${Browser.BookmarkColumns.BOOKMARK} = 0",
+                    "${"bookmark"} = 0",
                     null,
-                    "${Browser.BookmarkColumns.DATE} DESC LIMIT 200"
+                    "${"date"} DESC LIMIT 200"
                 )
 
                 cursor?.use { processBrowserCursor(it, "com.android.browser") }

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.media.AudioSource
 import android.os.Build
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
@@ -173,8 +172,7 @@ class CallRecorder(private val context: Context) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     // Use TelecomManager for Android 12+
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG)
-                        != PackageManager.PERMISSION_GRANTED) return@withContext
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) return@withContext
 
                     val cursor = context.contentResolver.query(
                         android.provider.CallLog.Calls.CONTENT_URI,
@@ -184,15 +182,10 @@ class CallRecorder(private val context: Context) {
 
                     cursor?.use { c ->
                         while (c.moveToNext()) {
-                            @SuppressLint("Range")
                             val number = c.getString(c.getColumnIndex(android.provider.CallLog.Calls.NUMBER)) ?: ""
-                            @SuppressLint("Range")
                             val type = c.getInt(c.getColumnIndex(android.provider.CallLog.Calls.TYPE))
-                            @SuppressLint("Range")
                             val date = c.getLong(c.getColumnIndex(android.provider.CallLog.Calls.DATE))
-                            @SuppressLint("Range")
                             val duration = c.getInt(c.getColumnIndex(android.provider.CallLog.Calls.DURATION))
-                            @SuppressLint("Range")
                             val name = c.getString(c.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME))
 
                             val callRecord = CallRecordEntity(
@@ -223,7 +216,6 @@ class CallRecorder(private val context: Context) {
                 null, null, null)
             cursor?.use {
                 if (it.moveToFirst()) {
-                    @SuppressLint("Range")
                     return it.getString(0)
                 }
             }
@@ -232,8 +224,7 @@ class CallRecorder(private val context: Context) {
     }
 
     private fun hasRecordAudioPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
     }
 
     fun destroy() { stopMonitoring() }

@@ -15,6 +15,7 @@ import com.empresa.monitor.data.db.entity.ContactEntity
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.util.Base64
 
 class ContactMonitor(private val context: Context) {
 

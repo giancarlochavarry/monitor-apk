@@ -20,7 +20,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
-        val geofenceTransition = geofencingEvent.transition
+        val geofenceTransition = geofencingEvent.geofenceTransition
 
         // Get the triggering geofences
         val triggeringGeofences = geofencingEvent.triggeringGeofences

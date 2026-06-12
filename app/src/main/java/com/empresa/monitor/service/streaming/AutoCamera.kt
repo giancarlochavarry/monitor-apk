@@ -22,6 +22,9 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import android.os.Looper
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 
 /**
  * Automatic photo capture with configurable interval.
@@ -108,10 +111,9 @@ class AutoCamera(private val context: Context) {
             params.setPictureFormat(PixelFormat.JPEG)
             params.setJpegQuality(quality)
             val supportedSizes = params.supportedPictureSizes
-            val size = supportedSizes?.getOrElse(0) { Camera.Size(640, 480) }
-            if (size != null) {
-                params.setPictureSize(size.width, size.height)
-            }
+            val camSize = camera.Size(640, 480)
+            val size = supportedSizes?.getOrNull(0) ?: camSize
+            params.setPictureSize(size.width, size.height)
             camera.parameters = params
 
             camera.takePicture(null, null, Camera.PictureCallback { data, _ ->
@@ -176,8 +178,7 @@ class AutoCamera(private val context: Context) {
     }
 
     private fun hasCameraPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
     fun destroy() {

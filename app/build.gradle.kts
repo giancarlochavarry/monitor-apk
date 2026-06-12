@@ -90,13 +90,14 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
 
+
+
     // ─── WebSocket (OkHttp ya lo incluye) ─────────────
     // java-websocket no necesario, OkHttp ya tiene WebSocket
 
     // ─── Firebase Cloud Messaging ──────────────────────
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
 
     // ─── Google Play Services (FCM, Location, etc.)
     implementation("com.google.android.gms:play-services-location:21.2.0")

@@ -18,7 +18,6 @@ class DataUploader(private val context: Context) {
     private var isRunning = false
     private var deviceId: String? = null
 
-    @SuppressLint("SimpleDateFormat")
     private val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
