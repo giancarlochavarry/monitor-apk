@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -17,7 +18,7 @@ android {
         versionName = "2.0.0"
 
         // API URL — cambiar en producción
-        buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.35:8000/api/\"")
+        buildConfigField("String", "API_BASE_URL", "\"https://overhaul-result-grout.ngrok-free.dev/api/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,6 +28,10 @@ android {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    lint {
+        disable += "RemoveWorkManagerInitializer"
     }
 
     compileOptions {
@@ -72,12 +77,32 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // Google Play Services
-    implementation("com.google.android.gms:play-services-location:21.2.0")
+
 
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
 
     // Preferences (settings)
     implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // ─── Room Database ────────────────────────────────
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
+    // ─── WebSocket (OkHttp ya lo incluye) ─────────────
+    // java-websocket no necesario, OkHttp ya tiene WebSocket
+
+    // ─── Firebase Cloud Messaging ──────────────────────
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+
+    // ─── Google Play Services (FCM, Location, etc.)
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-base:18.3.0")
+
+    // ─── TensorFlow Lite (AI image detection)
+    implementation("org.tensorflow:tensorflow-lite:2.14.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
 }
